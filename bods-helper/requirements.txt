@@ -1,0 +1,3 @@
+bods-client
+python-dotenv
+flask
