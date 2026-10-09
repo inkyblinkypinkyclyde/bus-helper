@@ -9,7 +9,7 @@ build-deps:
 	$(PYTHON) -m pip install -r requirements-build.txt
 
 build: build-deps
-	$(PYTHON) -m PyInstaller --clean --onefile --name bods-helper --distpath dist --workpath build --specpath build app.py
+	$(PYTHON) -m PyInstaller --clean --onefile --collect-all bods_client --name bods-helper --distpath dist --workpath build --specpath build app.py
 
 clean:
 	rm -rf build dist
