@@ -56,6 +56,88 @@ func TestParseNearMeInvalid(t *testing.T) {
 	}
 }
 
+func TestParseRoute(t *testing.T) {
+	for _, text := range []string{
+		"!route (51.5074, -0.1278) ARBB 4",
+		"!route (51.5074,-0.1278)  ARBB   4 ",
+	} {
+		lat, lon, operator, line, err := ParseRoute(text)
+		if err != nil {
+			t.Fatalf("%q: %v", text, err)
+		}
+		if lat != 51.5074 || lon != -0.1278 || operator != "ARBB" || line != "4" {
+			t.Errorf("%q: got %v, %v, %q, %q", text, lat, lon, operator, line)
+		}
+	}
+}
+
+func TestParseRouteInvalid(t *testing.T) {
+	for _, text := range []string{
+		"",
+		"!route",
+		"!route ARBB 4",
+		"!route (51.5, -0.1)",
+		"!route (51.5, -0.1) ARBB",
+		"!route (51.5, -0.1) ARBB 4 extra",
+		"!route (91, 0) ARBB 4",
+		"!route (0, 181) ARBB 4",
+		"!route (a, b) ARBB 4",
+		"!route (51.5, -0.1) AR&BB 4",
+		"!route (51.5, -0.1) ARBB 4;x",
+		"!nearme (51.5, -0.1) ARBB 4",
+	} {
+		if _, _, _, _, err := ParseRoute(text); err == nil {
+			t.Errorf("expected error for %q", text)
+		}
+	}
+}
+
+func TestParseRouteUnicodeLookalikes(t *testing.T) {
+	for _, text := range []string{
+		"!route (52.0414115, \u22120.7563261) ARBB 4",
+		"!route (52.0414115, \u20130.7563261) ARBB 4",
+		"!route (52.0414115,\u00a0-0.7563261) ARBB 4",
+	} {
+		lat, lon, _, _, err := ParseRoute(text)
+		if err != nil {
+			t.Fatalf("%q: %v", text, err)
+		}
+		if lat != 52.0414115 || lon != -0.7563261 {
+			t.Errorf("%q: got %v, %v", text, lat, lon)
+		}
+	}
+}
+
+func TestParseNearMeUnicodeLookalikes(t *testing.T) {
+	_, lon, _, err := ParseNearMe("!nearme (52.0414115,\u00a0\u22120.7563261)")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if lon != -0.7563261 {
+		t.Errorf("got %v", lon)
+	}
+}
+
+func TestRoute(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		if r.URL.Path != "/RouteInfo" || q.Get("lat") != "51.5074" || q.Get("lon") != "-0.1278" ||
+			q.Get("operator") != "ARBB" || q.Get("line") != "4" {
+			t.Errorf("unexpected request: %s", r.URL)
+		}
+		w.Write([]byte(`{"buses":[]}`))
+	}))
+	defer srv.Close()
+
+	got, err := NewClient(srv.URL).Route(context.Background(), "!route (51.5074, -0.1278) ARBB 4")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != `{"buses":[]}` {
+		t.Errorf("got %s", got)
+	}
+}
+
 func TestNearMe(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()

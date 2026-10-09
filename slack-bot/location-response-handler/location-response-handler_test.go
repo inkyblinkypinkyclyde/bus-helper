@@ -1,18 +1,23 @@
-package responseformatter
+package locationresponsehandler
 
 import (
-	"os"
 	"strings"
 	"testing"
 )
 
-func TestFormatLocationInfo(t *testing.T) {
-	data, err := os.ReadFile("../res.json")
-	if err != nil {
-		t.Fatal(err)
-	}
+const locationJSON = `{
+  "buses": [
+    {"bearing": 270.0, "destination": "Golders Green Station", "distance_m": 25.36, "line": "139", "operator": "TFLO", "origin": "Waterloo Station / Tenison Way", "vehicle_ref": "LK15CUH"},
+    {"bearing": null, "destination": "Hammersmith Bus Station", "distance_m": 30.72, "line": "9", "operator": "TFLO", "origin": "Aldwych / Bush House", "vehicle_ref": "LTZ1096"}
+  ],
+  "lat": 51.5077,
+  "lon": -0.1297,
+  "name": null,
+  "radius_m": 50.0
+}`
 
-	got, err := FormatLocationInfo(data)
+func TestFormatLocationInfo(t *testing.T) {
+	got, err := FormatLocationInfo([]byte(locationJSON))
 	if err != nil {
 		t.Fatal(err)
 	}
