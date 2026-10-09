@@ -28,6 +28,12 @@ curl 'http://127.0.0.1:5000/LocationInfo?lat=51.5077&lon=-0.1297&radius=50'
 curl 'http://127.0.0.1:5000/RouteInfo?operator=ARBB&line=4&lat=51.5074&lon=-0.1278'
 ```
 
+## Run tests and build executables
+
+Run the tests with `make test` after installing the project requirements.
+
+`make build` installs the build requirements into the active Python environment and creates `dist/bods-helper` for the host operating system and architecture. Run the build on each target OS and architecture; PyInstaller does not cross-compile.
+
 ## Run the helpers from the command line
 
 Stop info (buses near a location):
