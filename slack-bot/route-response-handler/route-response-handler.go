@@ -10,11 +10,12 @@ import (
 )
 
 type RouteBus struct {
-	Destination string  `json:"destination"`
-	Origin      string  `json:"origin"`
-	VehicleRef  string  `json:"vehicle_ref"`
-	DistanceM   float64 `json:"distance_m"`
-	RecordedAt  string  `json:"recorded_at"`
+	Destination     string  `json:"destination"`
+	Origin          string  `json:"origin"`
+	VehicleRef      string  `json:"vehicle_ref"`
+	DistanceM       float64 `json:"distance_m"`
+	RecordedAt      string  `json:"recorded_at"`
+	BearingFromUser *int    `json:"bearing_from_user"`
 }
 
 type RouteInfo struct {
@@ -48,10 +49,11 @@ func formatRouteInfo(data []byte, now time.Time) (string, error) {
 			table.Truncate(strings.ReplaceAll(bus.Destination, "_", " "), table.MaxDestinationWidth),
 			formatDistance(bus.DistanceM),
 			formatAge(bus.RecordedAt, now),
+			table.FormatBearing(bus.BearingFromUser),
 		}
 	}
 
-	tbl := table.Render([]string{"Vehicle", "Destination", "Distance", "Age"}, rows)
+	tbl := table.Render([]string{"Vehicle", "Destination", "Distance", "Age", "From user"}, rows)
 	return header + "\n```\n" + tbl + "```", nil
 }
 

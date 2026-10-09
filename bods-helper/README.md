@@ -23,6 +23,8 @@ The server listens on http://127.0.0.1:5000.
 - `GET /RouteInfo?operator=ARBB&line=4&lat=51.5074&lon=-0.1278&destination=Church_Street,Central_Railway_Station`
   - `operator`, `line`, `lat`, `lon` required; `destination` (comma-separated substrings) optional.
 
+Each bus response includes `bearing`, the bus's heading, and `bearing_from_user`, the initial compass bearing from the requested coordinates to the bus in degrees clockwise from north. `bearing_from_user` is null when the coordinates are identical.
+
 ```sh
 curl 'http://127.0.0.1:5000/LocationInfo?lat=51.5077&lon=-0.1297&radius=50'
 curl 'http://127.0.0.1:5000/RouteInfo?operator=ARBB&line=4&lat=51.5074&lon=-0.1278'

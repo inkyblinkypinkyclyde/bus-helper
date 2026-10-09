@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 
 from bods_client.client import BODSClient
 from bods_client.models import BoundingBox, Siri, SIRIVMParams
+from bearing import initial_bearing_degrees
 
 EARTH_RADIUS_M = 6_371_000
 
@@ -33,6 +34,7 @@ class NearbyBus:
     vehicle_ref: str
     distance_m: float
     bearing: float
+    bearing_from_user: float | None
 
 
 def bounding_box_around(lat: float, lon: float, radius_m: float) -> BoundingBox:
@@ -80,6 +82,9 @@ def get_nearby_buses(client: BODSClient, lat: float, lon: float, radius_m: float
                 vehicle_ref=journey.vehicle_ref or "?",
                 distance_m=distance,
                 bearing=journey.bearing if journey.bearing is not None else float("nan"),
+                bearing_from_user=initial_bearing_degrees(
+                    lat, lon, vehicle_location.latitude, vehicle_location.longitude
+                ),
             )
         )
 
