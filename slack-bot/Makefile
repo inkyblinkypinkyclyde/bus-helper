@@ -11,7 +11,10 @@ PLATFORMS := \
 	windows/amd64 \
 	windows/arm64
 
-.PHONY: build build-all clean
+.PHONY: build build-all test clean
+
+test:
+	go test ./...
 
 # Build for the current OS/architecture
 build:
