@@ -8,13 +8,14 @@ import (
 )
 
 type Bus struct {
-	Line        string   `json:"line"`
-	Destination string   `json:"destination"`
-	Origin      string   `json:"origin"`
-	Operator    string   `json:"operator"`
-	VehicleRef  string   `json:"vehicle_ref"`
-	DistanceM   float64  `json:"distance_m"`
-	Bearing     *float64 `json:"bearing"`
+	Line            string   `json:"line"`
+	Destination     string   `json:"destination"`
+	Origin          string   `json:"origin"`
+	Operator        string   `json:"operator"`
+	VehicleRef      string   `json:"vehicle_ref"`
+	DistanceM       float64  `json:"distance_m"`
+	Bearing         *float64 `json:"bearing"`
+	BearingFromUser *int     `json:"bearing_from_user"`
 }
 
 type LocationInfo struct {
@@ -50,9 +51,10 @@ func FormatLocationInfo(data []byte) (string, error) {
 			table.Truncate(bus.Destination, table.MaxDestinationWidth),
 			bus.VehicleRef,
 			fmt.Sprintf("%.0fm", bus.DistanceM),
+			table.FormatBearing(bus.BearingFromUser),
 		}
 	}
 
-	tbl := table.Render([]string{"Line", "Destination", "Vehicle", "Distance"}, rows)
+	tbl := table.Render([]string{"Line", "Destination", "Vehicle", "Distance", "From user"}, rows)
 	return header + "\n```\n" + tbl + "```", nil
 }

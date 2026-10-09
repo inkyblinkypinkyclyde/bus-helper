@@ -8,8 +8,8 @@ import (
 
 const routeJSON = `{
   "buses": [
-    {"destination": "Bus_Station", "distance_m": 69722.2, "origin": "Central_Railway_Station", "recorded_at": "2026-10-08 18:29:15+00:00", "vehicle_ref": "3868"},
-    {"destination": "Central_Railway_Station", "distance_m": 450.4, "origin": "Bus_Station", "recorded_at": "2026-10-08 18:27:57+00:00", "vehicle_ref": "3309"}
+	{"bearing_from_user": 359, "destination": "Bus_Station", "distance_m": 69722.2, "origin": "Central_Railway_Station", "recorded_at": "2026-10-08 18:29:15+00:00", "vehicle_ref": "3868"},
+	{"bearing_from_user": null, "destination": "Central_Railway_Station", "distance_m": 450.4, "origin": "Bus_Station", "recorded_at": "2026-10-08 18:27:57+00:00", "vehicle_ref": "3309"}
   ],
   "line": "4",
   "operator": "ARBB"
@@ -25,10 +25,10 @@ func TestFormatRouteInfo(t *testing.T) {
 
 	want := "*Line 4 (ARBB) buses*\n" +
 		"```\n" +
-		"Vehicle | Destination             | Distance | Age\n" +
-		"--------+-------------------------+----------+----\n" +
-		"3868    | Bus Station             | 69.7km   | 45s\n" +
-		"3309    | Central Railway Station | 450m     | 2m\n" +
+		"Vehicle | Destination             | Distance | Age | From user\n" +
+		"--------+-------------------------+----------+-----+----------\n" +
+		"3868    | Bus Station             | 69.7km   | 45s | 359°\n" +
+		"3309    | Central Railway Station | 450m     | 2m  | ?\n" +
 		"```"
 	if got != want {
 		t.Errorf("got:\n%s\nwant:\n%s", got, want)

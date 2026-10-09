@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 
 from bods_client.client import BODSClient
 from bods_client.models import Siri, SIRIVMParams
+from bearing import initial_bearing_degrees
 
 EARTH_RADIUS_M = 6_371_000
 MAX_RECORD_AGE = timedelta(minutes=10)
@@ -29,6 +30,7 @@ class RouteBus:
     origin: str
     distance_m: float
     recorded_at: str
+    bearing_from_user: float | None
 
 
 def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -80,6 +82,9 @@ def get_route_buses(
                 origin=journey.origin_name or "?",
                 distance_m=distance,
                 recorded_at=str(recorded_at),
+                bearing_from_user=initial_bearing_degrees(
+                    lat, lon, vehicle_location.latitude, vehicle_location.longitude
+                ),
             )
         )
 

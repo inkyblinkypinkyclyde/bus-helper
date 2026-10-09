@@ -1,6 +1,7 @@
 package table
 
 import (
+	"fmt"
 	"strings"
 	"unicode/utf8"
 )
@@ -14,6 +15,13 @@ func Truncate(s string, max int) string {
 		return s
 	}
 	return string(runes[:max-1]) + "…"
+}
+
+func FormatBearing(bearing *int) string {
+	if bearing == nil {
+		return "?"
+	}
+	return fmt.Sprintf("%03d°", *bearing)
 }
 
 // Render lays out rows as a monospace table with a header and separator line.
