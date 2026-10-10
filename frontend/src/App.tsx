@@ -17,6 +17,26 @@ function App() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       </MapContainer>
+      <section className="map-menu" aria-label="Map filters">
+        <label className="map-menu__field">
+          Operator
+          <input
+            name="operator"
+            type="text"
+            autoComplete="off"
+            placeholder="Enter operator"
+          />
+        </label>
+        <label className="map-menu__field">
+          Route number
+          <input
+            name="route"
+            type="text"
+            autoComplete="off"
+            placeholder="Enter route number"
+          />
+        </label>
+      </section>
     </main>
   )
 }

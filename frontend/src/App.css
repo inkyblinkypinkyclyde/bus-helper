@@ -3,3 +3,69 @@
   width: 100%;
   height: 100%;
 }
+
+.map-shell {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.map {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+}
+
+.map-menu {
+  position: absolute;
+  z-index: 1000;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  gap: 12px;
+  width: min(560px, calc(100% - 24px));
+  padding: 12px;
+  transform: translateX(-50%);
+  border: 1px solid #d5dad7;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 2px 12px rgb(24 39 34 / 18%);
+  box-sizing: border-box;
+}
+
+.map-menu__field {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  color: #35433e;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.map-menu__field input {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid #aeb9b4;
+  border-radius: 3px;
+  background: #fff;
+  color: #18211e;
+  font: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.map-menu__field input:focus-visible {
+  outline: 2px solid #176b57;
+  outline-offset: 1px;
+}
+
+@media (max-width: 420px) {
+  .map-menu {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+}
