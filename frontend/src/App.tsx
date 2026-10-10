@@ -116,6 +116,14 @@ function MapFilters() {
             <strong>{bus.vehicle_ref}</strong>
             <br />
             {bus.line} to {bus.destination}
+            <img
+              className="bus-photo"
+              src={`/bus-photos/${encodeURIComponent(bus.vehicle_ref)}.jpg`}
+              alt={`${bus.vehicle_ref} bus`}
+              onError={(event) => {
+                event.currentTarget.hidden = true
+              }}
+            />
           </Popup>
         </CircleMarker>
       ))}

@@ -56,6 +56,13 @@ test('requests a route and renders returned bus locations', async ({ page }) => 
   await page.goto('/')
   let requestUrl: URL | undefined
 
+  await page.route('**/bus-photos/BUS-1.jpg', async (route) => {
+    await route.fulfill({
+      contentType: 'image/svg+xml',
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>',
+    })
+  })
+
   await page.route('**/RouteInfo?*', async (route) => {
     requestUrl = new URL(route.request().url())
     await route.fulfill({
@@ -84,6 +91,11 @@ test('requests a route and renders returned bus locations', async ({ page }) => 
   await expect(marker).toBeVisible()
   await marker.click()
   await expect(page.getByText('BUS-1')).toBeVisible()
+  await expect(page.getByRole('img', { name: 'BUS-1 bus' })).toBeVisible()
+  expect(page.getByRole('img', { name: 'BUS-1 bus' })).toHaveAttribute(
+    'src',
+    '/bus-photos/BUS-1.jpg',
+  )
   expect(requestUrl?.pathname).toBe('/RouteInfo')
   expect(requestUrl?.searchParams.get('operator')).toBe('AB')
   expect(requestUrl?.searchParams.get('line')).toBe('12')

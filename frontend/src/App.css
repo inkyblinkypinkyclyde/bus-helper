@@ -105,6 +105,15 @@
   font-size: 13px;
 }
 
+.bus-photo {
+  display: block;
+  width: min(260px, 70vw);
+  max-height: 180px;
+  margin-top: 8px;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
 @media (max-width: 420px) {
   .map-menu {
     grid-template-columns: 1fr;
