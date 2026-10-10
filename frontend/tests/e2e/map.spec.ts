@@ -49,3 +49,42 @@ test('accepts an operator and route over the map on mobile', async ({ page }) =>
   expect(menuBounds?.y).toBeGreaterThanOrEqual(0)
   expect(menuBounds?.y + menuBounds!.height).toBeLessThan(viewport.height)
 })
+
+test('requests a route and renders returned bus locations', async ({ page }) => {
+  await page.goto('/')
+  let requestUrl: URL | undefined
+
+  await page.route('**/RouteInfo?*', async (route) => {
+    requestUrl = new URL(route.request().url())
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({
+        operator: 'AB',
+        line: '12',
+        buses: [
+          {
+            vehicle_ref: 'BUS-1',
+            line: '12',
+            destination: 'Central',
+            latitude: 51.5,
+            longitude: -0.1,
+          },
+        ],
+      }),
+    })
+  })
+
+  await page.getByRole('textbox', { name: 'Operator' }).fill('AB')
+  await page.getByRole('textbox', { name: 'Route number' }).fill('12')
+  await page.getByRole('button', { name: 'show' }).click()
+
+  const marker = page.locator('.bus-marker')
+  await expect(marker).toBeVisible()
+  await marker.click()
+  await expect(page.getByText('BUS-1')).toBeVisible()
+  expect(requestUrl?.pathname).toBe('/RouteInfo')
+  expect(requestUrl?.searchParams.get('operator')).toBe('AB')
+  expect(requestUrl?.searchParams.get('line')).toBe('12')
+  expect(requestUrl?.searchParams.get('lat')).toBe('54')
+  expect(requestUrl?.searchParams.get('lon')).toBe('-3')
+})

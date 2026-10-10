@@ -28,6 +28,8 @@ class RouteBus:
     vehicle_ref: str
     destination: str
     origin: str
+    latitude: float
+    longitude: float
     distance_m: float
     recorded_at: str
     bearing_from_user: float | None
@@ -80,6 +82,8 @@ def get_route_buses(
                 vehicle_ref=journey.vehicle_ref or "?",
                 destination=destination_name,
                 origin=journey.origin_name or "?",
+                latitude=vehicle_location.latitude,
+                longitude=vehicle_location.longitude,
                 distance_m=distance,
                 recorded_at=str(recorded_at),
                 bearing_from_user=initial_bearing_degrees(

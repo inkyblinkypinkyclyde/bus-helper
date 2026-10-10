@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import app
 from bearing import initial_bearing_degrees
+from route_distance import RouteBus
 
 
 @dataclass
@@ -52,7 +53,18 @@ class AppTestCase(unittest.TestCase):
     @patch("app.get_route_buses")
     @patch("app.get_client")
     def test_route_info_splits_and_trims_destinations(self, get_client, get_route_buses):
-        get_route_buses.return_value = [Bus(line="12", bearing=270, bearing_from_user=90)]
+        get_route_buses.return_value = [
+            RouteBus(
+                vehicle_ref="BUS-1",
+                destination="Central",
+                origin="North Road",
+                latitude=51.5,
+                longitude=-0.1,
+                distance_m=25,
+                recorded_at="2026-10-10T10:00:00+00:00",
+                bearing_from_user=90,
+            )
+        ]
 
         response = self.client.get(
             "/RouteInfo?operator=AB&line=12&lat=51.5&lon=-0.1&destination=North%20Road,%20Central"
@@ -64,7 +76,18 @@ class AppTestCase(unittest.TestCase):
             {
                 "operator": "AB",
                 "line": "12",
-                "buses": [{"line": "12", "bearing": 270, "bearing_from_user": 90}],
+                "buses": [
+                    {
+                        "vehicle_ref": "BUS-1",
+                        "destination": "Central",
+                        "origin": "North Road",
+                        "latitude": 51.5,
+                        "longitude": -0.1,
+                        "distance_m": 25,
+                        "recorded_at": "2026-10-10T10:00:00+00:00",
+                        "bearing_from_user": 90,
+                    }
+                ],
             },
         )
         get_route_buses.assert_called_once_with(
