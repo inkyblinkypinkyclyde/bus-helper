@@ -16,6 +16,8 @@ type RouteInfoResponse = {
 }
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? ''
+const defaultOperator = import.meta.env.VITE_DEFAULT_OPERATOR ?? ''
+const defaultRoute = import.meta.env.VITE_DEFAULT_ROUTE ?? ''
 
 function MapFilters() {
   const map = useMap()
@@ -71,6 +73,7 @@ function MapFilters() {
               name="operator"
               type="text"
               autoComplete="off"
+              defaultValue={defaultOperator}
               placeholder="Enter operator"
               required
             />
@@ -81,6 +84,7 @@ function MapFilters() {
               name="route"
               type="text"
               autoComplete="off"
+              defaultValue={defaultRoute}
               placeholder="Enter route number"
               required
             />

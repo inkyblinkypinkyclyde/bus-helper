@@ -37,6 +37,8 @@ test('accepts an operator and route over the map on mobile', async ({ page }) =>
 
   await expect(map).toBeVisible()
   await expect(menu).toBeVisible()
+  await expect(operator).toHaveValue('Metroline')
+  await expect(route).toHaveValue('24X')
   await operator.fill('Metroline')
   await route.fill('24X')
 
