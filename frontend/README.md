@@ -1,32 +1,33 @@
-# React + TypeScript + Vite
+# bus-panel frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A React + TypeScript + Vite app that shows live buses on a map (Leaflet). It gets its data from the `/RouteInfo` endpoint of [bods-helper](../bods-helper/README.md).
 
-Currently, two official plugins are available:
+## Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Start `bods-helper` first (it listens on http://127.0.0.1:5000), then pick one:
 
-## React Compiler
+### With Docker (no Node needed)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+docker compose up
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### With Node
+
+```sh
+npm install
+npm run dev
+```
+
+Open http://localhost:5173. The dev server proxies `/RouteInfo` to `http://127.0.0.1:5000`; set `BODS_API_URL` to use a different backend.
+
+## Scripts
+
+- `npm run dev` - start the dev server
+- `npm run build` - type-check and build to `dist/`
+- `npm run lint` - lint with Oxlint
+- `npm run test:e2e` - Playwright tests (requires Chrome)
+
+## Production build
+
+The `Dockerfile` builds a static bundle served by nginx. Set the `VITE_API_BASE_URL` build arg to the URL of the API, since nginx does not proxy it.
