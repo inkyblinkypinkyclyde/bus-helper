@@ -6,7 +6,6 @@ on:
     paths:
       - "slack-bot/**"
       - "bods-helper/**"
-      - "frontend/**"
       - ".github/workflows/release.yml"
 
 concurrency:
@@ -18,7 +17,6 @@ jobs:
     runs-on: ubuntu-22.04 # older glibc keeps the bods-helper binary portable
     permissions:
       contents: write
-      packages: write
     steps:
       - uses: actions/checkout@v4
 
@@ -49,25 +47,6 @@ jobs:
           cp slack-bot/build/* release/
           cp bods-helper/dist/bods-helper release/
           cd release && sha256sum * > checksums.txt
-
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set image name
-        # GHCR requires a lowercase image name
-        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}-frontend" >> "$GITHUB_ENV"
-
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v6
-        with:
-          context: frontend
-          push: true
-          tags: |
-            ${{ env.IMAGE }}:${{ github.run_number }}
-            ${{ env.IMAGE }}:latest
 
       - name: Create release
         env:
