@@ -50,12 +50,6 @@ function MapFilters() {
         (bus) => Number.isFinite(bus.latitude) && Number.isFinite(bus.longitude),
       )
       setBuses(locations)
-      if (locations.length > 0) {
-        map.fitBounds(
-          locations.map((bus) => [bus.latitude, bus.longitude]),
-          { padding: [48, 48], maxZoom: 12 },
-        )
-      }
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Request failed')
     } finally {
