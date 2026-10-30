@@ -19,7 +19,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. The dev server proxies `/RouteInfo` to `http://127.0.0.1:5000`; set `BODS_API_URL` to use a different backend.
+Open http://localhost:5173. To connect from another device on the same network, open `http://<machine-LAN-IP>:5173` instead. The dev server proxies `/RouteInfo` to `http://127.0.0.1:5000`; set `BODS_API_URL` to use a different backend.
 
 ## Scripts
 
@@ -31,3 +31,7 @@ Open http://localhost:5173. The dev server proxies `/RouteInfo` to `http://127.0
 ## Production build
 
 The `Dockerfile` builds a static bundle served by nginx. Set the `VITE_API_BASE_URL` build arg to the URL of the API, since nginx does not proxy it.
+
+## Installable app
+
+The production build includes a web app manifest and service worker. Install Bus Panel from the browser menu on a supported device; the app shell is cached for offline startup, while live bus data and map tiles still require a network connection. Service workers require HTTPS, except on localhost.
